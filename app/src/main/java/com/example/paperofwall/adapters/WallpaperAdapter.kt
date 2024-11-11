@@ -29,14 +29,17 @@ class WallpaperAdapter(private var wallist: MutableList<HitsItem?>) :
         return wallist.size
     }
 
+    @SuppressLint("ResourceType")
     override fun onBindViewHolder(holder: WallpaperViewHolder, position: Int) {
         Glide.with(holder.itemView.context).load(wallist[position]!!.previewURL)
-            .placeholder(R.drawable.ic_launcher_background)
+            .placeholder(R.drawable.progress_view)
             .into(holder.binding.imageView)
 
         holder.binding.wallpaperSample.setOnClickListener{
             val intent = Intent(holder.itemView.context,WallpaperActivity::class.java)
-            intent.putExtra("image",wallist[position]!!.previewURL)
+            intent.putExtra("image",position)
+            intent.putExtra("url",wallist[position]!!.largeImageURL)
+            holder.itemView.context.startActivity(intent)
 
         }
     }
@@ -45,5 +48,8 @@ class WallpaperAdapter(private var wallist: MutableList<HitsItem?>) :
     fun setData(list: MutableList<HitsItem?>) {
         wallist.addAll(list)
         notifyDataSetChanged()
+    }
+    fun clearList(){
+        wallist.clear()
     }
 }
